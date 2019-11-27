@@ -10,7 +10,6 @@ After each game, the user will be able to see his 5 best scores.
 
 ## Server
 
-Launch the server using the following command :
 ```./server [-p|--port PORT] [-l|--limit LIMIT] [-b|--bounds LOWBOUND,HIGHBOUND]```
 
 ### Options
