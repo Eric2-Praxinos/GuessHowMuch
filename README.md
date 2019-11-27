@@ -10,7 +10,7 @@ After each game, the user will be able to see his 5 best scores.
 
 ## Server
 
-```./server [-p|--port PORT] [-l|--limit LIMIT] [-b|--bounds LOWBOUND,HIGHBOUND]```
+```./build/server [-p|--port PORT] [-l|--limit LIMIT] [-b|--bounds LOWBOUND,HIGHBOUND]```
 
 ### Options
 -p --port	PORT (default=4242)
@@ -26,7 +26,7 @@ After each game, the user will be able to see his 5 best scores.
 
 ## Client
 
-```./client [-h|--host HOSTNAME] [-p|--port PORT] [-n|--name NAME] [-a|--auto]```
+```./build/client [-h|--host HOSTNAME] [-p|--port PORT] [-n|--name NAME] [-a|--auto]```
 
 ### Options
 
@@ -45,4 +45,14 @@ After each game, the user will be able to see his 5 best scores.
 
 # Compilation
 
-//TODO:
+## Prerequisites 
+
+- Install Qt
+- Install CMake
+- GCC (and G++)
+
+## Compile
+
+Compilation command :
+
+```cmake .```
