@@ -10,7 +10,7 @@ After each game, the user will be able to see his 5 best scores.
 
 ## Server
 
-```./build/server [-p|--port PORT] [-l|--limit LIMIT] [-b|--bounds LOWBOUND,HIGHBOUND]```
+```./server [-p|--port PORT] [-l|--limit LIMIT] [-b|--bounds LOWBOUND,HIGHBOUND]```
 
 ### Options
 -p --port	PORT (default=4242)
@@ -26,7 +26,7 @@ After each game, the user will be able to see his 5 best scores.
 
 ## Client
 
-```./build/client [-h|--host HOSTNAME] [-p|--port PORT] [-n|--name NAME] [-a|--auto]```
+```./client [-h|--host HOSTNAME] [-p|--port PORT] [-n|--name NAME] [-a|--auto]```
 
 ### Options
 
@@ -55,4 +55,4 @@ After each game, the user will be able to see his 5 best scores.
 
 Compilation command :
 
-```cmake .```
+```cmake . && make```

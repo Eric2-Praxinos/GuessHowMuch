@@ -1,8 +1,16 @@
 set(LIB_SOURCE
     ${LIB_SOURCE}
+    ${CMAKE_CURRENT_SOURCE_DIR}/ParserBoolean.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/ParserInteger.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/ParserInterval.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/ParserString.cpp
     PARENT_SCOPE)
 
 set(LIB_HEADERS
     ${LIB_HEADERS}
     ${CMAKE_CURRENT_SOURCE_DIR}/Parser.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/ParserBoolean.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/ParserInteger.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/ParserInterval.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/ParserString.h
     PARENT_SCOPE)

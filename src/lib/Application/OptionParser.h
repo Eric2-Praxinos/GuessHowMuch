@@ -3,11 +3,13 @@
 #include <map>
 #include <string>
 #include "Option.h"
-#include "Parser.h"
 
 namespace nApplication {
 
 class cOptionParser {
+public:
+    typedef ::std::map<::std::string, cOption*> tOptions;
+
 public:
     /** Destructor */
     virtual ~cOptionParser();
@@ -20,17 +22,16 @@ public:
     void Parse(int argc, char** argv) const;
 
     /** Adds a valid option */
-    template<typename T> void AddOption(const ::std::string iName, ::nBase::cParser<T>* iParser, T* iValue);
+    template<typename T> void AddOption(const ::std::string iName, ::nBase::cParser<T>* iParser, T* iValue, const T& iDefaultValue);
 
 private:
-    ::std::map<::std::string, cOption*> mOptions;
+    tOptions mOptions;
 };
 
 template<typename T>
 void
-cOptionParser::AddOption(const ::std::string iName, ::nBase::cParser<T>* iParser, T* iValue) {
-    mOptions.insert(::std::pair<std::string, cOption*>(iName, new cOptionT<T>(iName, iParser, iValue))
+cOptionParser::AddOption(const ::std::string iName, ::nBase::cParser<T>* iParser, T* iValue, const T& iDefaultValue) {
+    mOptions[iName] = new cOptionT<T>(iName, iParser, iValue, iDefaultValue);
 }
-
 
 } // namespace nApplication

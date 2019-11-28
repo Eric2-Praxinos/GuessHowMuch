@@ -8,14 +8,24 @@ template <typename T>
 class cParser {
 public:
     /** Destructor */
-    virtual ~cParser() = 0;
+    virtual ~cParser();
 
     /** Constructor */
     cParser();
 
 public:
     /** Parse the string */
-    virtual const T& Parse(const ::std::string& iString) const = 0;
+    virtual T Parse(const ::std::string& iString, const T& iDefaultValue) const = 0;
 };
+
+template <typename T>
+cParser<T>::~cParser() {
+
+}
+
+template <typename T>
+cParser<T>::cParser() {
+
+}
 
 } //namespace nBase
