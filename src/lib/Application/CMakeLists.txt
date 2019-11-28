@@ -1,0 +1,13 @@
+set(LIB_SOURCE
+    ${LIB_SOURCE}
+    ${CMAKE_CURRENT_SOURCE_DIR}/Application.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/Option.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/OptionParser.cpp
+    PARENT_SCOPE)
+
+set(LIB_HEADERS
+    ${LIB_HEADERS}
+    ${CMAKE_CURRENT_SOURCE_DIR}/Application.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/Option.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/OptionParser.h
+    PARENT_SCOPE)
