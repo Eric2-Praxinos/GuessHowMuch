@@ -10,11 +10,14 @@ public:
     ~cParserBoolean();
 
     /** Constructor */
-    cParserBoolean();
+    cParserBoolean(bool iDefaultValue);
 
 public:
     /** Parse the string */
     virtual bool Parse(const ::std::string& iString, const bool& iDefaultValue) const;
+
+private:
+    bool mDefaultValue;
 };
 
 } //namespace nBase

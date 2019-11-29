@@ -20,17 +20,21 @@ cOptionParser::cOptionParser() :
 
 void
 cOptionParser::Parse(int argc, char** argv) const {
-    for (int i = 0; i < argc; i++) {
+    for(tOptions::const_iterator it = mOptions.begin(); it != mOptions.end(); it++) {
+        const cOption* option = (*it).second;
+        option->SetValueToDefaultValue();
+    }
+
+    for (int i = 1; i < argc; i++) {
         tOptions::const_iterator it = mOptions.find(argv[i]);
         if (it == mOptions.end()) {
             throw new std::invalid_argument("Unknown argument");
         }
         const cOption* option = (*it).second;
-        option->SetValueToDefaultValue();
-
+        
         if (i+1 < argc) {
             tOptions::const_iterator it2 = mOptions.find(argv[i+1]);
-            if (it == mOptions.end()) {
+            if (it2 == mOptions.end()) {
                 option->Parse(argv[i+1]);
                 i++;
                 continue;

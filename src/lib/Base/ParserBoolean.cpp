@@ -5,8 +5,9 @@ namespace nBase {
 cParserBoolean::~cParserBoolean() {
 }
 
-cParserBoolean::cParserBoolean() : 
-    cParser<bool>()
+cParserBoolean::cParserBoolean(bool iDefaultValue) : 
+    cParser<bool>(),
+    mDefaultValue(iDefaultValue)
 {
 }
 
@@ -17,7 +18,7 @@ cParserBoolean::Parse(const ::std::string& iString, const bool& iDefaultValue) c
     } else if (iString == "false") {
         return false;
     } else {
-        return iDefaultValue;
+        return mDefaultValue;
     }
 }
 
