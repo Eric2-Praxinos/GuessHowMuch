@@ -9,7 +9,8 @@ cApplication::~cApplication() {
 };
 
 /** Constructor */
-cApplication::cApplication() : 
+cApplication::cApplication() :
+    QObject(),
     mOptionParser(new cOptionParser())
 {
 }

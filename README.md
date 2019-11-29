@@ -53,6 +53,9 @@ After each game, the user will be able to see his 5 best scores.
 
 ## Compile
 
+Your Qt5 Installation should contain a Qt5Config.cmake file somewhere
+You have to give the compilation command the directory where Qt5Config.cmake is located.
+
 Compilation command :
 
-```cmake . && make```
+```cmake -D QTDIR=PATH_TO_Qt5Config.cmake . && make```

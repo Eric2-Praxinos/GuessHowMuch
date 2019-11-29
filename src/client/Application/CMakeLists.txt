@@ -1,0 +1,9 @@
+set(CLIENT_SOURCE
+    ${SOURCE}
+    ${CMAKE_CURRENT_SOURCE_DIR}/Application.cpp
+    PARENT_SCOPE)
+
+set(CLIENT_HEADERS
+    ${HEADERS}
+    ${CMAKE_CURRENT_SOURCE_DIR}/Application.h
+    PARENT_SCOPE)

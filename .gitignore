@@ -3,5 +3,7 @@ Makefile
 CMakeCache.txt
 cmake_install.cmake
 CMakeFiles
-client
-server
+/client
+/server
+server_autogen
+client_autogen

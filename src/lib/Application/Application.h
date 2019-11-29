@@ -1,10 +1,13 @@
 #pragma once
 
+#include <QtCore/QObject>
+
 namespace nApplication { 
 
 class cOptionParser;
 
-class cApplication {
+class cApplication : public QObject {
+Q_OBJECT
 public:
     /** Destructor */
     virtual ~cApplication() = 0;
