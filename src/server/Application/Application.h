@@ -24,11 +24,11 @@ public:
     void Launch(int argc, char** argv);
 
 private Q_SLOTS:
-    /** Triggers when a client connects*/
-    void onClientConnected();
+    /** Triggers when a client connects */
+    void OnClientConnected();
 
-    /** Triggers when a client disconnects*/
-    void onClientDisconnected();
+    /** Triggers when a session closes */
+    void OnSessionClosed();
 
 private:
     int mPort;

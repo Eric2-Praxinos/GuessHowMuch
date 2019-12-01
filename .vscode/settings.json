@@ -39,5 +39,12 @@
         "streambuf": "cpp",
         "typeinfo": "cpp",
         "map": "cpp"
-    }
+    },
+    "cmake.configureArgs": [
+        "-DQTDIR=/home/eric/Qt5/5.12.6/gcc_64/lib/cmake/Qt5"
+    ],
+    "C_Cpp.default.includePath": [
+        "${default}",
+        "/home/eric/Qt5/5.12.6/gcc_64/include"
+    ]
 }

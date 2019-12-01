@@ -23,10 +23,13 @@ public:
 
 private Q_SLOTS:
     /** Triggers when the application is connected to the server*/
-    void onConnected();
+    void OnConnected();
 
     /** Triggers when the application is connected to the server*/
-    void onDisconnected();
+    void OnDisconnected();
+
+    /** Triggers when the application receives a message from the server*/
+    void OnMessageReceived(const QString& iMessage);
 
 private:
     ::std::string mHost;

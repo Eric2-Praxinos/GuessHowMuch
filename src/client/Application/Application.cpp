@@ -48,21 +48,28 @@ cApplication::Launch(int argc, char** argv) {
 
     ::std::string url = "ws://" + mHost + ":" + ::std::to_string(mPort);
 
-    connect(mSocket, SIGNAL(connected()), this, SLOT(onConnected()));
-    connect(mSocket, SIGNAL(disconnected()), this, SLOT(onDisconnected()));
+    connect(mSocket, SIGNAL(connected()), this, SLOT(OnConnected()));
+    connect(mSocket, SIGNAL(disconnected()), this, SLOT(OnDisconnected()));
     mSocket->open(QUrl(url.c_str()));
 
     app.exec();
 }
 
 void
-cApplication::onConnected() {
+cApplication::OnConnected() {
     printf("Socket Connected\n");
+    connect(mSocket, SIGNAL(textMessageReceived(const QString&)), this, SLOT(OnMessageReceived(const QString&)));
+    mSocket->sendTextMessage("My Name is the Doctor.");
 }
 
 void
-cApplication::onDisconnected() {
+cApplication::OnDisconnected() {
     printf("Socket Disconnected\n");
+}
+
+void
+cApplication::OnMessageReceived(const QString& iMessage) {
+    printf("Message Received %s\n", iMessage.toStdString().c_str());
 }
 
 }

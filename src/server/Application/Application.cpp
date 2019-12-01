@@ -1,4 +1,5 @@
 #include "Application.h"
+#include "Session.h"
 #include "../../lib/Application/OptionParser.h"
 #include "../../lib/Base/ParserBoolean.h"
 #include "../../lib/Base/ParserInteger.h"
@@ -45,20 +46,22 @@ cApplication::Launch(int argc, char** argv) {
     printf("mLimit = %d\n", mLimit);
     printf("mBounds = %d, %d\n", mBounds.Min(), mBounds.Max());
 
-    connect(mSocket, SIGNAL(newConnection()), this, SLOT(onClientConnected()));
+    connect(mSocket, SIGNAL(newConnection()), this, SLOT(OnClientConnected()));
     mSocket->listen(QHostAddress::Any, mPort);
 
     app.exec();
 }
 
 void
-cApplication::onClientConnected() {
+cApplication::OnClientConnected() {
     printf("New Client Connected\n");
+    cSession* session = new cSession(mSocket->nextPendingConnection());
+    connect(session, SIGNAL(Closed()), this, SLOT(OnSessionClosed()));
 }
 
 void
-cApplication::onClientDisconnected() {
-    printf("New Client Disconnected\n");
+cApplication::OnSessionClosed() {
+    printf("Session Closed\n");
 }
 
 }
