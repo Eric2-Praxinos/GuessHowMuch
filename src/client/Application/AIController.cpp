@@ -1,5 +1,6 @@
 #include "AIController.h"
 #include "Session.h"
+#include "../../lib/Base/Error.h"
 #include <QtCore/QDateTime>
 
 
@@ -51,9 +52,9 @@ cAIController::OnCommandReceived(const ::nShared::nSession::cCommand& iCommand) 
         }
         break;
 
-        default:
-            //TODO:
-            break;
+        default: {
+        }
+        break;
     }
 }
 

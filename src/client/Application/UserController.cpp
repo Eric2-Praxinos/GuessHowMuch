@@ -51,8 +51,7 @@ cUserController::OnCommandReceived(const ::nShared::nSession::cCommand& iCommand
         break;
 
         default:
-            //TODO:
-            break;
+        break;
     }
 }
 

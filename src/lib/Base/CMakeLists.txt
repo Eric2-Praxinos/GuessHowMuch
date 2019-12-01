@@ -1,5 +1,6 @@
 set(LIB_SOURCE
     ${LIB_SOURCE}
+    ${CMAKE_CURRENT_SOURCE_DIR}/Error.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/ParserBoolean.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/ParserInteger.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/ParserInterval.cpp
@@ -8,6 +9,7 @@ set(LIB_SOURCE
 
 set(LIB_HEADERS
     ${LIB_HEADERS}
+    ${CMAKE_CURRENT_SOURCE_DIR}/Error.h
     ${CMAKE_CURRENT_SOURCE_DIR}/Parser.h
     ${CMAKE_CURRENT_SOURCE_DIR}/ParserBoolean.h
     ${CMAKE_CURRENT_SOURCE_DIR}/ParserInteger.h

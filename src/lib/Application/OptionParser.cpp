@@ -1,5 +1,6 @@
 #include "OptionParser.h"
 #include "unistd.h"
+#include "../Base/Error.h"
 #include <stdexcept>
 
 namespace nApplication {
@@ -28,20 +29,24 @@ cOptionParser::Parse(int argc, char** argv) const {
     for (int i = 1; i < argc; i++) {
         tOptions::const_iterator it = mOptions.find(argv[i]);
         if (it == mOptions.end()) {
-            throw new std::invalid_argument("Unknown argument");
+            throw cError("invalid_argument", "Unknown option : " + std::string(argv[i]));
         }
         const cOption* option = (*it).second;
         
-        if (i+1 < argc) {
-            tOptions::const_iterator it2 = mOptions.find(argv[i+1]);
-            if (it2 == mOptions.end()) {
-                option->Parse(argv[i+1]);
-                i++;
-                continue;
+        try {
+            if (i+1 < argc) {
+                tOptions::const_iterator it2 = mOptions.find(argv[i+1]);
+                if (it2 == mOptions.end()) {
+                    option->Parse(argv[i+1]);
+                    i++;
+                    continue;
+                }
             }
-        }
 
-        option->Parse("");
+            option->Parse("");
+        } catch (cError iError) {
+            throw cError(iError.Code(), option->Name() + " option error : " + iError.Message());
+        }
     }
 }
 

@@ -4,6 +4,8 @@
 #include "../../lib/Math/Range.h"
 #include <string>
 #include <QtCore/QRandomGenerator>
+#include <QtWebSockets/QWebSocket>
+#include <QtWebSockets/QWebSocketProtocol>
 
 QT_FORWARD_DECLARE_CLASS(QWebSocketServer)
 QT_FORWARD_DECLARE_CLASS(QWebSocket)
@@ -32,6 +34,12 @@ private Q_SLOTS:
 
     /** Triggers when a session closes */
     void OnSessionClosed();
+
+    /** Triggers if a server error occurs */
+    void OnServerError(QWebSocketProtocol::CloseCode iCloseCode);
+
+    /** Triggers if a new connection acceptance error occurs */
+    void OnAcceptError(QAbstractSocket::SocketError iSocketError);
 
 private:
     int mPort;

@@ -6,6 +6,7 @@
 #include "../../lib/Base/ParserBoolean.h"
 #include "../../lib/Base/ParserInteger.h"
 #include "../../lib/Base/ParserString.h"
+#include "../../lib/Base/Error.h"
 #include "../../lib/Math/Range.h"
 #include <QtCore/QCoreApplication>
 #include <QtWebSockets/QWebSocket>
@@ -33,16 +34,21 @@ void
 cApplication::Launch(int argc, char** argv) {
     QCoreApplication app(argc, argv);
 
-    ::nApplication::cOptionParser* optionParser = OptionParser();
-    optionParser->AddOption("-h", new ::nBase::cParserString(), &mHost, ::std::string("localhost"));
-    optionParser->AddOption("--host", new ::nBase::cParserString(), &mHost, ::std::string("localhost"));
-    optionParser->AddOption("-p", new ::nBase::cParserInteger(::nMath::cRange(1, 65535)), &mPort, 4242);
-    optionParser->AddOption("--port", new ::nBase::cParserInteger(::nMath::cRange(1, 65535)), &mPort, 4242);
-    optionParser->AddOption("-n", new ::nBase::cParserString(), &mName, ::std::string(""));
-    optionParser->AddOption("--name", new ::nBase::cParserString(), &mName, ::std::string(""));
-    optionParser->AddOption("-a", new ::nBase::cParserBoolean(true), &mAuto, false);
-    optionParser->AddOption("--auto", new ::nBase::cParserBoolean(true), &mAuto, false);
-    optionParser->Parse(argc, argv);
+    try {
+        ::nApplication::cOptionParser* optionParser = OptionParser();
+        optionParser->AddOption("-h", new ::nBase::cParserString(), &mHost, ::std::string("localhost"));
+        optionParser->AddOption("--host", new ::nBase::cParserString(), &mHost, ::std::string("localhost"));
+        optionParser->AddOption("-p", new ::nBase::cParserInteger(::nMath::cRange(1, 65535)), &mPort, 4242);
+        optionParser->AddOption("--port", new ::nBase::cParserInteger(::nMath::cRange(1, 65535)), &mPort, 4242);
+        optionParser->AddOption("-n", new ::nBase::cParserString(), &mName, ::std::string(""));
+        optionParser->AddOption("--name", new ::nBase::cParserString(), &mName, ::std::string(""));
+        optionParser->AddOption("-a", new ::nBase::cParserBoolean(true), &mAuto, false);
+        optionParser->AddOption("--auto", new ::nBase::cParserBoolean(true), &mAuto, false);
+        optionParser->Parse(argc, argv);
+    } catch (cError iError) {
+        printf("%s\n", iError.Message().c_str());
+        return;
+    }
 
     ::std::string url = "ws://" + mHost + ":" + ::std::to_string(mPort);
 

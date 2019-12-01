@@ -5,6 +5,7 @@
 #include <QtCore/QJsonObject>
 #include <QtCore/QDateTime>
 #include "../../shared/Status.h"
+#include "../../lib/Base/Error.h"
 
 namespace nClient {
 namespace nApplication {
@@ -27,6 +28,7 @@ cSession::Open(const QUrl& iUrl) {
     connect(mSocket, SIGNAL(connected()), this, SLOT(OnConnected()));
     connect(mSocket, SIGNAL(disconnected()), this, SLOT(OnDisconnected()));
     connect(mSocket, SIGNAL(textMessageReceived(const QString&)), this, SLOT(OnMessageReceived(const QString&)));
+    connect(mSocket, SIGNAL(error(QAbstractSocket::SocketError)), this, SLOT(OnMessageReceived(QAbstractSocket::SocketError)));
     mSocket->open(iUrl);
 }
 
@@ -94,8 +96,19 @@ cSession::OnMessageReceived(const QString& iMessage) {
         }
         break;
 
-        case ::nShared::nSession::cCommand::kUnknown: {
-            //TODO:
+        case ::nShared::nSession::cCommand::kError: {
+            const QJsonObject& value = command.Value();
+            printf("\nServer Error : %s\n", value["error"].toString().toStdString().c_str());
+            printf("The number to guess was : %d\n", value["number"].toInt());
+            if (value.contains("bestSessions")) {
+                PrintHighScores(value["bestSessions"].toArray());
+            }
+        }
+        break;
+
+        default: {
+            printf("Unknown Server Command");
+            mSocket->close();
             return;
         }
         break;
@@ -112,6 +125,12 @@ cSession::OnConnected() {
 void
 cSession::OnDisconnected() {
     emit Closed();
+}
+
+void
+cSession::OnSocketError(QAbstractSocket::SocketError iError) {
+    printf("%s", mSocket->errorString().toStdString().c_str());
+    mSocket->close();
 }
 
 void

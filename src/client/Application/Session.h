@@ -2,6 +2,7 @@
 
 #include <QtCore/QObject>
 #include <QtCore/QJsonObject>
+#include <QtWebSockets/QWebSocket>
 #include "../../shared/Command.h"
 
 QT_FORWARD_DECLARE_CLASS(QWebSocket)
@@ -42,6 +43,9 @@ private Q_SLOTS:
 
     /** Triggers when a client connects */
     void OnDisconnected();
+
+    /** Triggers when a socket error occurs */
+    void OnSocketError(QAbstractSocket::SocketError iError);
 
 public:
     /** Sends client's informations to the server */

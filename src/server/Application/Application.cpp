@@ -5,6 +5,7 @@
 #include "../../lib/Base/ParserInteger.h"
 #include "../../lib/Base/ParserInterval.h"
 #include "../../lib/Base/ParserString.h"
+#include "../../lib/Base/Error.h"
 #include "../../lib/Math/Range.h"
 #include <QtCore/QCoreApplication>
 #include <QtWebSockets/QWebSocketServer>
@@ -36,19 +37,32 @@ void
 cApplication::Launch(int argc, char** argv) {
     QCoreApplication app(argc, argv);
 
-    ::nApplication::cOptionParser* optionParser = OptionParser();
-    optionParser->AddOption("-p", new ::nBase::cParserInteger(::nMath::cRange(1, 65535)), &mPort, 4242);
-    optionParser->AddOption("--port", new ::nBase::cParserInteger(::nMath::cRange(1, 65535)), &mPort, 4242);
-    optionParser->AddOption("-l", new ::nBase::cParserInteger(::nMath::cRange(-1, INT_MAX)), &mLimit, -1);
-    optionParser->AddOption("--limit", new ::nBase::cParserInteger(::nMath::cRange(1, INT_MAX)), &mLimit, -1);
-    optionParser->AddOption("-b", new ::nBase::cParserInterval(), &mBounds, ::nMath::cRange(1, 100));
-    optionParser->AddOption("--bounds", new ::nBase::cParserInterval(), &mBounds, ::nMath::cRange(1, 100));
-    optionParser->Parse(argc, argv); 
+    try {
+        ::nApplication::cOptionParser* optionParser = OptionParser();
+        optionParser->AddOption("-p", new ::nBase::cParserInteger(::nMath::cRange(1, 65535)), &mPort, 4242);
+        optionParser->AddOption("--port", new ::nBase::cParserInteger(::nMath::cRange(1, 65535)), &mPort, 4242);
+        optionParser->AddOption("-l", new ::nBase::cParserInteger(::nMath::cRange(-1, INT_MAX)), &mLimit, -1);
+        optionParser->AddOption("--limit", new ::nBase::cParserInteger(::nMath::cRange(1, INT_MAX)), &mLimit, -1);
+        optionParser->AddOption("-b", new ::nBase::cParserInterval(), &mBounds, ::nMath::cRange(1, 100));
+        optionParser->AddOption("--bounds", new ::nBase::cParserInterval(), &mBounds, ::nMath::cRange(1, 100));
+        optionParser->Parse(argc, argv);
+    } catch (cError iError) {
+        printf("%s\n", iError.Message().c_str());
+        return;
+    } 
 
-    //TODO: manage invalid limit when limit == 0
+    if (mLimit == 0) {
+        printf("Specified limit cannot be 0");
+        return;
+    }
 
     connect(mSocket, SIGNAL(newConnection()), this, SLOT(OnClientConnected()));
-    mSocket->listen(QHostAddress::Any, mPort);
+    connect(mSocket, SIGNAL(serverError(QWebSocketProtocol::CloseCode)), this, SLOT(OnServerError(QWebSocketProtocol::CloseCode)));
+    printf("Listening...\n");
+    bool success = mSocket->listen(QHostAddress::Any, mPort);
+    if (!success) {
+        return;
+    }
 
     app.exec();
 }
@@ -62,8 +76,17 @@ cApplication::OnClientConnected() {
 }
 
 void
+cApplication::OnServerError(QWebSocketProtocol::CloseCode iCloseCode) {
+    printf("%s\n", mSocket->errorString().toStdString().c_str());
+}
+
+void
+cApplication::OnAcceptError(QAbstractSocket::SocketError iSocketError) {
+    printf("%s\n", mSocket->errorString().toStdString().c_str());
+}
+
+void
 cApplication::OnSessionClosed() {
-    printf("Session Closed\n");
     for (std::vector<cSession*>::iterator it = mSessions.begin(); it != mSessions.end(); it++) {
         if (*it == sender()) {
             mSessions.erase(it);

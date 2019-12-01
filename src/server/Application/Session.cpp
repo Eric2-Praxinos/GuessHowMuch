@@ -1,5 +1,6 @@
 #include "Session.h"
 #include "../../shared/Command.h"
+#include "../../lib/Base/Error.h"
 #include <QtWebSockets/QWebSocket>
 #include <QtCore/QJsonDocument>
 #include <QtCore/QJsonArray>
@@ -80,12 +81,11 @@ cSession::OnMessageReceived(const QString& iMessage) {
         }
         break;
 
-        case ::nShared::nSession::cCommand::kUnknown: {
-            //TODO:
+        default: {
+            SendError("Unknown Command");
+            mSocket->close();
         }
         break;
-        default:
-            break;
     }
 }
 
@@ -165,7 +165,7 @@ cSession::GetUserBestSessions(int iCount) const {
 
     QFile file("sessions.json");
     if (!file.open(QIODevice::ReadOnly)) {
-        //TODO:
+        throw cError("filesystem_error", "Failed to Read User's best Sessions");
     }
 
     QByteArray data = file.readAll();
@@ -202,7 +202,7 @@ cSession::SaveSession() const {
     
     QFile file("sessions.json");
     if (!file.open(QIODevice::ReadWrite)) {
-        //TODO:
+        throw cError("filesystem_error", "Failed to Save Session");
     }
 
     QByteArray data = file.readAll();

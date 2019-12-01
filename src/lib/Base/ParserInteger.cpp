@@ -1,4 +1,5 @@
 #include "ParserInteger.h"
+#include "Error.h"
 #include <stdexcept>
 
 namespace nBase {
@@ -26,13 +27,13 @@ cParserInteger::Parse(const ::std::string& iString, const int& iDefaultValue) co
     try {
         integer = std::stoi(iString);
     } catch (std::invalid_argument exception) {
-        throw new std::invalid_argument("Invalid or missing value");
+        throw cError("invalid_argument", "Value is missing or is not a valid integer value");
     } catch (std::out_of_range excpetion) {
-        throw new std::invalid_argument("Out of range value");
+        throw cError("out_of_range", "Value is outside of acceptable range for an integer value");
     }
 
     if (mHasRange && !mRange.Includes(integer)) {
-        throw new std::out_of_range("Out of range value");
+        throw cError("out_of_range", "Value is outside the expected range");
     }
     return integer;
 }

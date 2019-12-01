@@ -44,7 +44,8 @@
         "qwebsocket": "cpp",
         "ratio": "cpp",
         "functional": "cpp",
-        "variant": "cpp"
+        "variant": "cpp",
+        "qwebsocketprotocol": "cpp"
     },
     "cmake.configureArgs": [
         "-DQTDIR=/home/eric/Qt5/5.12.6/gcc_64/lib/cmake/Qt5"
