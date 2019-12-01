@@ -11,6 +11,8 @@ class cCommand {
 public:
 enum eType {
     kUnknown = 0,
+    kError,
+    kClientInfos,
     kRules,
     kRequireFirstGuess,
     kGuess,

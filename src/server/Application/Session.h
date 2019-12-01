@@ -1,8 +1,11 @@
 #pragma once
 
 #include <QtCore/QObject>
+#include <QtCore/QJsonArray>
 #include <QtCore/QRandomGenerator>
+#include <QtCore/QDateTime>
 #include "../../lib/Math/Range.h"
+#include "../../shared/Status.h"
 
 QT_FORWARD_DECLARE_CLASS(QWebSocket)
 
@@ -11,6 +14,7 @@ namespace nApplication {
 
 class cSession : public QObject {
 Q_OBJECT
+
 public:
     /** Destructor */
     ~cSession();
@@ -49,12 +53,25 @@ private:
     /** Sends a failure message */
     void SendFailure() const;
 
+    /** Sends a success message */
+    void SendError(const QString& iError) const;
+
+private:
+    /** Save the session informations in a file */
+    void SaveSession() const;
+
+    /** Get the user iCount best sessions  */
+    QJsonArray GetUserBestSessions(int iCount) const;
+
 private:
     QWebSocket* mSocket;
     int mNumber;
     int mLimit;
     int mTryCount;
     ::nMath::cRange mBounds;
+    QString mClientName;
+    QDateTime mStartDateTime;
+    ::nShared::nSession::eStatus mStatus;
 };
 
 }

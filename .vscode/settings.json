@@ -41,7 +41,10 @@
         "map": "cpp",
         "qrandomgenerator": "cpp",
         "qjsonobject": "cpp",
-        "qwebsocket": "cpp"
+        "qwebsocket": "cpp",
+        "ratio": "cpp",
+        "functional": "cpp",
+        "variant": "cpp"
     },
     "cmake.configureArgs": [
         "-DQTDIR=/home/eric/Qt5/5.12.6/gcc_64/lib/cmake/Qt5"

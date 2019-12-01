@@ -17,7 +17,7 @@ public:
     ~cSession();
 
     /** Constructor */
-    cSession();
+    cSession(const QString& iName);
 
 public:
     /** Opens the session */
@@ -44,11 +44,19 @@ private Q_SLOTS:
     void OnDisconnected();
 
 public:
+    /** Sends client's informations to the server */
+    void SendClientInfos() const;
+
     /** Sends a guess to the server */
     void SendGuess(int iGuess) const;
 
 private:
+    /** Prints the user highscores contained in iArray */
+    void PrintHighScores(QJsonArray iArray);
+
+private:
     QWebSocket* mSocket;
+    QString mName;
 };
 
 }

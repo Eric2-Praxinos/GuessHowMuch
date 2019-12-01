@@ -45,7 +45,7 @@ cApplication::Launch(int argc, char** argv) {
 
     ::std::string url = "ws://" + mHost + ":" + ::std::to_string(mPort);
 
-    mSession = new cSession();
+    mSession = new cSession(QString::fromStdString(mName));
 
     if (mAuto) {
         mController = new cAIController(mSession);
