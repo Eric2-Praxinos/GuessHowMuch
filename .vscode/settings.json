@@ -38,7 +38,10 @@
         "stdexcept": "cpp",
         "streambuf": "cpp",
         "typeinfo": "cpp",
-        "map": "cpp"
+        "map": "cpp",
+        "qrandomgenerator": "cpp",
+        "qjsonobject": "cpp",
+        "qwebsocket": "cpp"
     },
     "cmake.configureArgs": [
         "-DQTDIR=/home/eric/Qt5/5.12.6/gcc_64/lib/cmake/Qt5"

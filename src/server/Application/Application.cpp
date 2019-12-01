@@ -25,7 +25,8 @@ cApplication::cApplication() :
     mLimit(0),
     mBounds(),
     mSocket(new QWebSocketServer("GuessHowMuch Server", QWebSocketServer::NonSecureMode, this)),
-    mClients()
+    mClients(),
+    mRandomGenerator(QDateTime::currentMSecsSinceEpoch())
 {
 }
 
@@ -42,6 +43,8 @@ cApplication::Launch(int argc, char** argv) {
     optionParser->AddOption("--bounds", new ::nBase::cParserInterval(), &mBounds, ::nMath::cRange(1, 100));
     optionParser->Parse(argc, argv); 
 
+    //TODO: manage invalid limit when limit == 0
+
     printf("mPort = %d\n", mPort);
     printf("mLimit = %d\n", mLimit);
     printf("mBounds = %d, %d\n", mBounds.Min(), mBounds.Max());
@@ -54,9 +57,9 @@ cApplication::Launch(int argc, char** argv) {
 
 void
 cApplication::OnClientConnected() {
-    printf("New Client Connected\n");
-    cSession* session = new cSession(mSocket->nextPendingConnection());
+    cSession* session = new cSession(mSocket->nextPendingConnection(), mLimit, mBounds, mRandomGenerator);
     connect(session, SIGNAL(Closed()), this, SLOT(OnSessionClosed()));
+    session->Open();
 }
 
 void

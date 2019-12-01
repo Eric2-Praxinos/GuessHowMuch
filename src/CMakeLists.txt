@@ -1,3 +1,4 @@
+add_subdirectory(shared)
 add_subdirectory(client)
 add_subdirectory(lib)
 add_subdirectory(server)
@@ -8,6 +9,10 @@ set(CLIENT_SOURCE
 
 set(LIB_SOURCE
     ${LIB_SOURCE}
+    PARENT_SCOPE)
+
+set(SHARED_SOURCE
+    ${SHARED_SOURCE}
     PARENT_SCOPE)
 
 set(SERVER_SOURCE

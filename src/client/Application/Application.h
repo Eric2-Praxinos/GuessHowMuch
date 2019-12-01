@@ -8,6 +8,9 @@ QT_FORWARD_DECLARE_CLASS(QWebSocket)
 namespace nClient {
 namespace nApplication {
 
+class cSession;
+class cController;
+
 class cApplication : public ::nApplication::cApplication {
 Q_OBJECT
 public:
@@ -21,22 +24,13 @@ public:
     /** Launch the application */
     void Launch(int argc, char** argv);
 
-private Q_SLOTS:
-    /** Triggers when the application is connected to the server*/
-    void OnConnected();
-
-    /** Triggers when the application is connected to the server*/
-    void OnDisconnected();
-
-    /** Triggers when the application receives a message from the server*/
-    void OnMessageReceived(const QString& iMessage);
-
 private:
     ::std::string mHost;
     int mPort;
     ::std::string mName;
     bool mAuto;
-    QWebSocket* mSocket;
+    cSession* mSession;
+    cController* mController;
 };
 
 }

@@ -1,5 +1,7 @@
 #pragma once
 
+#include <QtCore/QJsonObject>
+
 namespace nMath {
 
 class cRange {
@@ -22,6 +24,9 @@ public:
 
     /** Returns wether iValue is included in the range */
     bool Includes(int iValue) const;
+
+    /** Returns the json representation */
+    QJsonObject ToJson() const;
 
 private:
     int mMin;

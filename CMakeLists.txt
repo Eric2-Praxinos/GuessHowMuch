@@ -15,8 +15,8 @@ set(CMAKE_CXX_FLAGS "${Qt5Widgets_EXECUTABLE_COMPILE_FLAGS}")
 
 add_subdirectory("src")
 
-add_executable(server ${SERVER_SOURCE} ${LIB_SOURCE})
-add_executable(client ${CLIENT_SOURCE} ${LIB_SOURCE})
+add_executable(server ${SERVER_SOURCE} ${LIB_SOURCE} ${SHARED_SOURCE})
+add_executable(client ${CLIENT_SOURCE} ${LIB_SOURCE} ${SHARED_SOURCE})
 
 target_link_libraries(server Qt5::Core Qt5::WebSockets)
 target_link_libraries(client Qt5::Core Qt5::WebSockets)

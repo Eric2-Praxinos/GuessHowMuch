@@ -3,6 +3,7 @@
 #include "../../lib/Application/Application.h"
 #include "../../lib/Math/Range.h"
 #include <string>
+#include <QtCore/QRandomGenerator>
 
 QT_FORWARD_DECLARE_CLASS(QWebSocketServer)
 QT_FORWARD_DECLARE_CLASS(QWebSocket)
@@ -36,6 +37,7 @@ private:
     ::nMath::cRange mBounds;
     QWebSocketServer* mSocket;
     std::vector<QWebSocket*> mClients;
+    QRandomGenerator mRandomGenerator;
 };
 
 }

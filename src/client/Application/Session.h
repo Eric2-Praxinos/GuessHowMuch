@@ -1,48 +1,50 @@
 #pragma once
 
 #include <QtCore/QObject>
-#include <QtCore/QRandomGenerator>
-#include "../../lib/Math/Range.h"
+#include <QtCore/QJsonObject>
+#include "../../shared/Command.h"
 
 QT_FORWARD_DECLARE_CLASS(QWebSocket)
 
-namespace nServer {
+namespace nClient {
 namespace nApplication {
 
 class cSession : public QObject {
 Q_OBJECT
+
 public:
     /** Destructor */
     ~cSession();
 
     /** Constructor */
-    cSession(QWebSocket* iSocket, int iLimit, const ::nMath::cRange& iBounds, QRandomGenerator& iRandomGenerator);
+    cSession();
 
 public:
     /** Opens the session */
-    void Open();
+    void Open(const QUrl& iUrl);
 
 Q_SIGNALS:
     /** Session closed signal */
+    void Opened();
+
+    /** Session closed signal */
     void Closed();
 
+    /** Session closed signal */
+    void CommandReceived(const ::nShared::nSession::cCommand& iCommand);
+
 private Q_SLOTS:
+    /** Triggers when a client connects */
+    void OnConnected();
+
     /** Triggers when the session receives a message from the client */
-    void OnMessageReceived(const QString& iMessage);
+    void OnMessageReceived(const QString& iCommand);
 
     /** Triggers when a client connects */
-    void OnClientDisconnected();
-
-private:
-    /** Sends the rules to the client */
-    void SendRules() const;
+    void OnDisconnected();
 
 private:
     QWebSocket* mSocket;
-    int mNumber;
-    int mLimit;
-    int mTryCount;
-    ::nMath::cRange mBounds;
 };
 
 }

@@ -34,4 +34,13 @@ cRange::Includes(int iValue) const {
     return iValue >= mMin && iValue <= mMax;
 }
 
+QJsonObject
+cRange::ToJson() const {
+    QJsonObject json;
+    json["min"] = mMin;
+    json["max"] = mMax;
+
+    return json;
+}
+
 }
