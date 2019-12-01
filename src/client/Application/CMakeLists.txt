@@ -1,6 +1,7 @@
 set(CLIENT_SOURCE
     ${SOURCE}
     ${CMAKE_CURRENT_SOURCE_DIR}/AIController.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/UserController.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/Application.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/Controller.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/Session.cpp
@@ -9,6 +10,7 @@ set(CLIENT_SOURCE
 set(CLIENT_HEADERS
     ${HEADERS}
     ${CMAKE_CURRENT_SOURCE_DIR}/AIController.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/UserController.h
     ${CMAKE_CURRENT_SOURCE_DIR}/Application.h
     ${CMAKE_CURRENT_SOURCE_DIR}/Controller.h
     ${CMAKE_CURRENT_SOURCE_DIR}/Session.h

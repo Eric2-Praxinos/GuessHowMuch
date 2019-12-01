@@ -1,6 +1,7 @@
 #include "Application.h"
 #include "Session.h"
 #include "AIController.h"
+#include "UserController.h"
 #include "../../lib/Application/OptionParser.h"
 #include "../../lib/Base/ParserBoolean.h"
 #include "../../lib/Base/ParserInteger.h"
@@ -50,6 +51,7 @@ cApplication::Launch(int argc, char** argv) {
     if (mAuto) {
         mController = new cAIController(mSession);
     } else {
+        mController = new cUserController(mSession);
     }
     mSession->Open(QUrl(url.c_str()));
 
