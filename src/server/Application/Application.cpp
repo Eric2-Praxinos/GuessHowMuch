@@ -15,7 +15,9 @@ namespace nApplication {
 
 /** Destructor */
 cApplication::~cApplication() {
-
+    for (std::vector<cSession*>::iterator it = mSessions.begin(); it != mSessions.end(); it++) {
+        delete *it;
+    }
 }
 
 /** Constructor */
@@ -25,7 +27,7 @@ cApplication::cApplication() :
     mLimit(0),
     mBounds(),
     mSocket(new QWebSocketServer("GuessHowMuch Server", QWebSocketServer::NonSecureMode, this)),
-    mClients(),
+    mSessions(),
     mRandomGenerator(QDateTime::currentMSecsSinceEpoch())
 {
 }
@@ -55,12 +57,20 @@ void
 cApplication::OnClientConnected() {
     cSession* session = new cSession(mSocket->nextPendingConnection(), mLimit, mBounds, mRandomGenerator);
     connect(session, SIGNAL(Closed()), this, SLOT(OnSessionClosed()));
+    mSessions.push_back(session);
     session->Open();
 }
 
 void
 cApplication::OnSessionClosed() {
     printf("Session Closed\n");
+    for (std::vector<cSession*>::iterator it = mSessions.begin(); it != mSessions.end(); it++) {
+        if (*it == sender()) {
+            mSessions.erase(it);
+            break;
+        }
+    }
+    delete sender();
 }
 
 }

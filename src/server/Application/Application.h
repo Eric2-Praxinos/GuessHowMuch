@@ -11,6 +11,8 @@ QT_FORWARD_DECLARE_CLASS(QWebSocket)
 namespace nServer {
 namespace nApplication {
 
+class cSession;
+
 class cApplication : public ::nApplication::cApplication {
 Q_OBJECT
 public:
@@ -36,7 +38,7 @@ private:
     int mLimit;
     ::nMath::cRange mBounds;
     QWebSocketServer* mSocket;
-    std::vector<QWebSocket*> mClients;
+    std::vector<cSession*> mSessions;
     QRandomGenerator mRandomGenerator;
 };
 

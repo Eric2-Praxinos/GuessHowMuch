@@ -24,6 +24,10 @@ public:
     /** Launch the application */
     void Launch(int argc, char** argv);
 
+private Q_SLOTS:
+    /** Triggers when the socket closes */
+    void OnSessionClosed() const;
+
 private:
     ::std::string mHost;
     int mPort;

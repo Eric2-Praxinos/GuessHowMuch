@@ -56,6 +56,7 @@ cSession::OnMessageReceived(const QString& iMessage) {
                 mStatus = ::nShared::nSession::kSuccess;
                 SaveSession();
                 SendSuccess();
+                mSocket->close();
                 return;
             }
             
@@ -66,6 +67,7 @@ cSession::OnMessageReceived(const QString& iMessage) {
                     mStatus = ::nShared::nSession::kFailure;
                     SaveSession();
                     SendFailure();
+                    mSocket->close();
                     return;
                 }
             }
@@ -205,7 +207,6 @@ cSession::SaveSession() const {
 
     QByteArray data = file.readAll();
     QJsonDocument document = QJsonDocument::fromJson(data);
-    printf("%s\n", document.toJson(QJsonDocument::Compact).toStdString().c_str());
 
     QJsonObject object;
     object["clientName"] = mClientName;
@@ -220,7 +221,6 @@ cSession::SaveSession() const {
     document.setArray(array);
     file.resize(0); //clears the file;
     file.write(document.toJson(QJsonDocument::Compact));
-    printf("%s\n", document.toJson(QJsonDocument::Compact).toStdString().c_str());
 
     file.close();
 }

@@ -47,7 +47,7 @@ cApplication::Launch(int argc, char** argv) {
     ::std::string url = "ws://" + mHost + ":" + ::std::to_string(mPort);
 
     mSession = new cSession(QString::fromStdString(mName));
-
+    connect(mSession, SIGNAL(Closed()), this, SLOT(OnSessionClosed()));
     if (mAuto) {
         mController = new cAIController(mSession);
     } else {
@@ -56,6 +56,13 @@ cApplication::Launch(int argc, char** argv) {
     mSession->Open(QUrl(url.c_str()));
 
     app.exec();
+}
+
+void
+cApplication::OnSessionClosed() const {
+    delete mController;
+    delete mSession;
+    exit(0);
 }
 
 }

@@ -78,7 +78,6 @@ cSession::OnMessageReceived(const QString& iMessage) {
             const QJsonObject& value = command.Value();
             printf("\nGAME OVER...\n");
             printf("The number to guess was : %d\n", value["number"].toInt());
-            printf("\nYour highscores :\n");
             if (value.contains("bestSessions")) {
                 PrintHighScores(value["bestSessions"].toArray());
             }
