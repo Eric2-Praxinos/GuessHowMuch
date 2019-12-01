@@ -43,6 +43,10 @@ private Q_SLOTS:
     /** Triggers when a client connects */
     void OnDisconnected();
 
+public:
+    /** Sends a guess to the server */
+    void SendGuess(int iGuess) const;
+
 private:
     QWebSocket* mSocket;
 };

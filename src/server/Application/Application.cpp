@@ -45,10 +45,6 @@ cApplication::Launch(int argc, char** argv) {
 
     //TODO: manage invalid limit when limit == 0
 
-    printf("mPort = %d\n", mPort);
-    printf("mLimit = %d\n", mLimit);
-    printf("mBounds = %d, %d\n", mBounds.Min(), mBounds.Max());
-
     connect(mSocket, SIGNAL(newConnection()), this, SLOT(OnClientConnected()));
     mSocket->listen(QHostAddress::Any, mPort);
 

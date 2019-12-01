@@ -41,12 +41,7 @@ cApplication::Launch(int argc, char** argv) {
     optionParser->AddOption("--name", new ::nBase::cParserString(), &mName, ::std::string(""));
     optionParser->AddOption("-a", new ::nBase::cParserBoolean(true), &mAuto, false);
     optionParser->AddOption("--auto", new ::nBase::cParserBoolean(true), &mAuto, false);
-    optionParser->Parse(argc, argv); 
-
-    printf("mHost = %s\n", mHost.c_str());
-    printf("mPort = %d\n", mPort);
-    printf("mName = %s\n", mName.c_str());
-    printf("mAuto = %s\n", mAuto ? "true" : "false");
+    optionParser->Parse(argc, argv);
 
     ::std::string url = "ws://" + mHost + ":" + ::std::to_string(mPort);
 

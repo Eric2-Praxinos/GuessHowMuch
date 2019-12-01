@@ -11,7 +11,12 @@ class cCommand {
 public:
 enum eType {
     kUnknown = 0,
-    kRules
+    kRules,
+    kRequireFirstGuess,
+    kGuess,
+    kHint,
+    kSuccess,
+    kFailure
 };
 
 public:

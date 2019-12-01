@@ -2,6 +2,8 @@
 
 #include "Controller.h"
 #include "../../shared/Command.h"
+#include "../../lib/Math/Range.h"
+#include <QtCore/QRandomGenerator>
 
 namespace nClient {
 namespace nApplication {
@@ -24,6 +26,9 @@ private Q_SLOTS:
     void OnCommandReceived(const ::nShared::nSession::cCommand& iCommand);
 
 private:
+    QRandomGenerator mRandomGenerator;
+    ::nMath::cRange mBounds;
+    int mGuess;
 };
 
 }

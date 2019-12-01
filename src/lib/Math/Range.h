@@ -22,6 +22,12 @@ public:
     /** Maximum bound of the range */
     int Max() const;
 
+    /** Set Minimum bound of the range */
+    void Min(int iMin);
+
+    /** Set Maximum bound of the range */
+    void Max(int iMax);
+
     /** Returns wether iValue is included in the range */
     bool Includes(int iValue) const;
 

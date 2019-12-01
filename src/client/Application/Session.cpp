@@ -44,15 +44,52 @@ cSession::OnMessageReceived(const QString& iMessage) {
         }
         break;
 
-        case ::nShared::nSession::cCommand::kUnknown: {
-            //TODO:
+        case ::nShared::nSession::cCommand::kRequireFirstGuess: {
+            printf("\nMake your first guess : ");
+            fflush(stdout);
         }
         break;
-        default:
-            emit CommandReceived(command);
-            break;
-    }
 
+        case ::nShared::nSession::cCommand::kHint: {
+            const QJsonObject& value = command.Value();
+
+            printf("\nWrong guess ... :(\n");
+            if (value["hint"].toString() == "-") {
+                printf("The number is lower than your guess.\n");
+            } else {
+                printf("The number is higher than your guess.\n");
+            }
+
+            if (value.contains("triesLeft")) {
+                printf("You have %d tries left.\n", value["triesLeft"].toInt());
+            }
+
+            printf("Make your next guess : ");
+            fflush(stdout);
+        }
+        break;
+
+        case ::nShared::nSession::cCommand::kFailure: {
+            const QJsonObject& value = command.Value();
+            printf("\nGAME OVER...\n");
+            printf("The number to guess was : %d\n", value["number"].toInt());
+        }
+        break;
+
+        case ::nShared::nSession::cCommand::kSuccess: {
+            const QJsonObject& value = command.Value();
+            printf("\n\\o/ CONGRATULATIONS ! \\o/");
+            printf("The number to guess was : %d\n", value["number"].toInt());
+        }
+        break;
+
+        case ::nShared::nSession::cCommand::kUnknown: {
+            //TODO:
+            return;
+        }
+        break;
+    }
+    emit CommandReceived(command);
 }
 
 void
@@ -63,6 +100,14 @@ cSession::OnConnected() {
 void
 cSession::OnDisconnected() {
     emit Closed();
+}
+
+void
+cSession::SendGuess(int iGuess) const {
+    QJsonObject valueJson;
+    valueJson["guess"] = iGuess;
+    ::nShared::nSession::cCommand command(::nShared::nSession::cCommand::kGuess, valueJson);
+    mSocket->sendTextMessage(command.ToString());
 }
 
 }

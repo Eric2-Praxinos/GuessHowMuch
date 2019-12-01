@@ -37,6 +37,18 @@ private:
     /** Sends the rules to the client */
     void SendRules() const;
 
+    /** Sends a request to get a first guess */
+    void SendRequireFirstGuess() const;
+
+    /** Sends a hint to the client */
+    void SendHint(const QString& iHint) const;
+
+    /** Sends a success message */
+    void SendSuccess() const;
+
+    /** Sends a failure message */
+    void SendFailure() const;
+
 private:
     QWebSocket* mSocket;
     int mNumber;

@@ -29,6 +29,16 @@ cRange::Max() const {
     return mMax;
 }
 
+void
+cRange::Min(int iMin) {
+    mMin = iMin;
+}
+
+void
+cRange::Max(int iMax) {
+    mMax = iMax;
+}
+
 bool
 cRange::Includes(int iValue) const {
     return iValue >= mMin && iValue <= mMax;
