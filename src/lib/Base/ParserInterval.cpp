@@ -16,6 +16,7 @@ cParserInterval::cParserInterval() :
 
 ::nMath::cRange
 cParserInterval::Parse(const ::std::string& iString, const ::nMath::cRange& iDefaultValue) const {
+    // Parce an interval with format [int1,int2]
     int index = iString.find(',');
     if (index == ::std::string::npos || index <= 0 || index >= iString.length() - 1) {
         throw cError("invalid_argument", "Value is not a valid integer range");

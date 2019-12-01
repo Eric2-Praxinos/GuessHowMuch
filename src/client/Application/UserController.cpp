@@ -24,28 +24,30 @@ cUserController::cUserController(cSession* iSession) :
 void
 cUserController::OnCommandReceived(const ::nShared::nSession::cCommand& iCommand) {
     switch(iCommand.Type()) {
-        case ::nShared::nSession::cCommand::kRules: {
-        }
-        break;
-
         case ::nShared::nSession::cCommand::kRequireFirstGuess: {
+            // Wait for the user to enter a number
             int guess = 0;
             while(!(std::cin >> guess)) {
                 std::cin.clear();
                 std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
                 std::cout << "Invalid Input. Try Again : ";
             }
+
+            //Send the number
             Session()->SendGuess(guess);
         }
         break;
 
         case ::nShared::nSession::cCommand::kHint: {
+            // Wait for the user to enter a number
             int guess = 0;
             while(!(std::cin >> guess)) {
                 std::cin.clear();
                 std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
                 std::cout << "Invalid Input. Try Again : ";
             }
+
+            //Send the number
             Session()->SendGuess(guess);
         }
         break;

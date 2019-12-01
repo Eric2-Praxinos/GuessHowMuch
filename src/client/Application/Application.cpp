@@ -34,6 +34,7 @@ void
 cApplication::Launch(int argc, char** argv) {
     QCoreApplication app(argc, argv);
 
+    //Option Parsing
     try {
         ::nApplication::cOptionParser* optionParser = OptionParser();
         optionParser->AddOption("-h", new ::nBase::cParserString(), &mHost, ::std::string("localhost"));
@@ -55,17 +56,24 @@ cApplication::Launch(int argc, char** argv) {
         mName = "";
     }
 
+    // Build socket url
     ::std::string url = "ws://" + mHost + ":" + ::std::to_string(mPort);
 
+    //Create Session
     mSession = new cSession(QString::fromStdString(mName));
     connect(mSession, SIGNAL(Closed()), this, SLOT(OnSessionClosed()));
+    
+    //Create Controller based on auto mode state
     if (mAuto) {
         mController = new cAIController(mSession);
     } else {
         mController = new cUserController(mSession);
     }
+
+    //Open session
     mSession->Open(QUrl(url.c_str()));
 
+    //app loop
     app.exec();
 }
 

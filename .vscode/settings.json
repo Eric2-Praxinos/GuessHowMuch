@@ -45,7 +45,16 @@
         "ratio": "cpp",
         "functional": "cpp",
         "variant": "cpp",
-        "qwebsocketprotocol": "cpp"
+        "qwebsocketprotocol": "cpp",
+        "chrono": "cpp",
+        "codecvt": "cpp",
+        "ctime": "cpp",
+        "list": "cpp",
+        "filesystem": "cpp",
+        "iterator": "cpp",
+        "numeric": "cpp",
+        "random": "cpp",
+        "iostream": "cpp"
     },
     "cmake.configureArgs": [
         "-DQTDIR=/home/eric/Qt5/5.12.6/gcc_64/lib/cmake/Qt5"

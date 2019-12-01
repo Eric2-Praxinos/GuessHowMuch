@@ -16,6 +16,7 @@ namespace nApplication {
 
 /** Destructor */
 cApplication::~cApplication() {
+    // Sessions deletion
     for (std::vector<cSession*>::iterator it = mSessions.begin(); it != mSessions.end(); it++) {
         delete *it;
     }
@@ -27,7 +28,7 @@ cApplication::cApplication() :
     mPort(0),
     mLimit(0),
     mBounds(),
-    mSocket(new QWebSocketServer("GuessHowMuch Server", QWebSocketServer::NonSecureMode, this)),
+    mSocket(nullptr),
     mSessions(),
     mRandomGenerator(QDateTime::currentMSecsSinceEpoch())
 {
@@ -37,6 +38,7 @@ void
 cApplication::Launch(int argc, char** argv) {
     QCoreApplication app(argc, argv);
 
+    //Option parsing
     try {
         ::nApplication::cOptionParser* optionParser = OptionParser();
         optionParser->AddOption("-p", new ::nBase::cParserInteger(::nMath::cRange(1, 65535)), &mPort, 4242);
@@ -56,19 +58,25 @@ cApplication::Launch(int argc, char** argv) {
         return;
     }
 
+    // Create server socket
+    mSocket = new QWebSocketServer("GuessHowMuch Server", QWebSocketServer::NonSecureMode, this);
     connect(mSocket, SIGNAL(newConnection()), this, SLOT(OnClientConnected()));
     connect(mSocket, SIGNAL(serverError(QWebSocketProtocol::CloseCode)), this, SLOT(OnServerError(QWebSocketProtocol::CloseCode)));
     printf("Listening...\n");
+
+    //Listen for client connections
     bool success = mSocket->listen(QHostAddress::Any, mPort);
     if (!success) {
         return;
     }
 
+    // app loop
     app.exec();
 }
 
 void
 cApplication::OnClientConnected() {
+    // Create a new session for each new client connection
     cSession* session = new cSession(mSocket->nextPendingConnection(), mLimit, mBounds, mRandomGenerator);
     connect(session, SIGNAL(Closed()), this, SLOT(OnSessionClosed()));
     mSessions.push_back(session);
@@ -87,6 +95,7 @@ cApplication::OnAcceptError(QAbstractSocket::SocketError iSocketError) {
 
 void
 cApplication::OnSessionClosed() {
+    //Cleanup session when it's closed
     for (std::vector<cSession*>::iterator it = mSessions.begin(); it != mSessions.end(); it++) {
         if (*it == sender()) {
             mSessions.erase(it);

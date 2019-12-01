@@ -5,7 +5,7 @@
 #include <QtCore/QRandomGenerator>
 #include <QtCore/QDateTime>
 #include "../../lib/Math/Range.h"
-#include "../../shared/Status.h"
+#include "../../shared/Session/Status.h"
 
 QT_FORWARD_DECLARE_CLASS(QWebSocket)
 

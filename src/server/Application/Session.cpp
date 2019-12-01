@@ -1,5 +1,5 @@
 #include "Session.h"
-#include "../../shared/Command.h"
+#include "../../shared/Session/Command.h"
 #include "../../lib/Base/Error.h"
 #include <QtWebSockets/QWebSocket>
 #include <QtCore/QJsonDocument>
@@ -27,18 +27,20 @@ cSession::cSession(QWebSocket* iSocket, int iLimit, const ::nMath::cRange& iBoun
     mStartDateTime(),
     mStatus(::nShared::nSession::kInProgress)
 {
+    //Choose a number to guess for this session
     mNumber = iRandomGenerator.bounded(iBounds.Min(), iBounds.Max());
 }
 
 void
 cSession::Open() {
+    //Init startDate
     mStartDateTime = QDateTime::currentDateTime();
+    
     printf("Open Session with number : %d\n", mNumber);
+
+    // create connections
     connect(mSocket, SIGNAL(disconnected()), this, SLOT(OnClientDisconnected()));
     connect(mSocket, SIGNAL(textMessageReceived(const QString&)), this, SLOT(OnMessageReceived(const QString&)));
-    
-    SendRules();
-    SendRequireFirstGuess();
 }
 
 void
@@ -48,31 +50,39 @@ cSession::OnMessageReceived(const QString& iMessage) {
     switch(command.Type()) {
         case ::nShared::nSession::cCommand::kClientInfos: {
             mClientName = command.Value()["clientName"].toString();
+
+            //Client is now identified, send rules and require first guess from the client
+            SendRules();
+            SendRequireFirstGuess();
         }
         break;
 
         case ::nShared::nSession::cCommand::kGuess: {
             int guess = command.Value()["guess"].toInt();
+            //If client guess is correct
             if (guess == mNumber) {
+                //Save Session and send success message to the client
                 mStatus = ::nShared::nSession::kSuccess;
                 SaveSession();
                 SendSuccess();
                 mSocket->close();
                 return;
             }
-            
+
+            //If client guess is not correct, increment tryCount
             mTryCount++;
             
-            if (mLimit > -1) {
-                if (mTryCount >= mLimit) {
-                    mStatus = ::nShared::nSession::kFailure;
-                    SaveSession();
-                    SendFailure();
-                    mSocket->close();
-                    return;
-                }
+            //if we reached the try limit
+            if (mLimit > -1 && mTryCount >= mLimit) {
+                //Save Session and send failure message to the client
+                mStatus = ::nShared::nSession::kFailure;
+                SaveSession();
+                SendFailure();
+                mSocket->close();
+                return;
             }
             
+            //Send hint to the client depending on his guess
             if (guess > mNumber) {
                 SendHint("-");
             } else {
@@ -82,6 +92,7 @@ cSession::OnMessageReceived(const QString& iMessage) {
         break;
 
         default: {
+            //Manage unknown commands
             SendError("Unknown Command");
             mSocket->close();
         }
@@ -91,12 +102,12 @@ cSession::OnMessageReceived(const QString& iMessage) {
 
 void
 cSession::OnClientDisconnected() {
+    //Manage client disconnection to avoid having a dead connection in memory
     emit Closed();
 }
 
 void
 cSession::SendRules() const {
-    //Send first command to inform client with the rules
     QJsonObject valueJson;
     valueJson["limit"] = mLimit;
     valueJson["bounds"] = mBounds.ToJson();
@@ -153,6 +164,7 @@ cSession::SendError(const QString& iError) const {
     mSocket->sendTextMessage(command.ToString());
 }
 
+// Session Comparison function for the highscore table generation
 bool compareSession(const QJsonObject& iSession1, const QJsonObject& iSession2) {
     if (iSession1["status"].toInt() != iSession2["status"].toInt()) {
         if (iSession1["status"].toInt() == ::nShared::nSession::kSuccess) {
@@ -174,21 +186,25 @@ bool compareSession(const QJsonObject& iSession1, const QJsonObject& iSession2) 
 
 QJsonArray
 cSession::GetUserBestSessions(int iCount) const {
+    //No Highscore for anonymous
     if (mClientName.size() == 0) {
         return QJsonArray();
     }
 
+    // Open File
     QFile file("sessions.json");
     if (!file.open(QIODevice::ReadOnly)) {
         throw cError("filesystem_error", "Failed to Read User's best Sessions");
     }
 
+    //Read data
     QByteArray data = file.readAll();
     file.close();
     QJsonDocument document = QJsonDocument::fromJson(data);
     QJsonArray array = document.array();
     QJsonArray bestScoresArray;
 
+    //get clients sessions only
     ::std::vector<QJsonObject> sessions;
     for(QJsonArray::const_iterator it = array.begin(); it != array.end(); it++) {
         QJsonObject session = (*it).toObject();
@@ -197,11 +213,15 @@ cSession::GetUserBestSessions(int iCount) const {
         }
     }
 
+    //sort client sessions
     std::sort(sessions.begin(), sessions.end(), compareSession);
+
+    //keep only iCount client sessions
     if (sessions.size() > iCount ) {
         sessions.resize(iCount);
     }
 
+    //return a json array
     for(std::vector<QJsonObject>::iterator it = sessions.begin(); it != sessions.end(); it++) {
         QJsonObject session = (*it);
         bestScoresArray.append(session);
@@ -211,18 +231,22 @@ cSession::GetUserBestSessions(int iCount) const {
 
 void
 cSession::SaveSession() const {
+    //No session saved for Anonymous
     if (mClientName.size() == 0) {
         return;
     }
     
+    //Open file
     QFile file("sessions.json");
     if (!file.open(QIODevice::ReadWrite)) {
         throw cError("filesystem_error", "Failed to Save Session");
     }
 
+    //Read data
     QByteArray data = file.readAll();
     QJsonDocument document = QJsonDocument::fromJson(data);
 
+    //Create session json
     QJsonObject object;
     object["clientName"] = mClientName;
     object["startDate"] = mStartDateTime.toString("dd/MM/yyyy HH:mm:ss");
@@ -230,11 +254,14 @@ cSession::SaveSession() const {
     object["tryCount"] = mTryCount;
     object["status"] = mStatus;
 
+    //Append session to existing json array
     QJsonArray array = document.array();
     array.append(object);
 
     document.setArray(array);
-    file.resize(0); //clears the file;
+    //clear the file
+    file.resize(0);
+    //write data in the file 
     file.write(document.toJson(QJsonDocument::Compact));
 
     file.close();

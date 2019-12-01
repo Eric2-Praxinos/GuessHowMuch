@@ -13,6 +13,7 @@ enum eStatus {
     kError = 4
 };
 
+// Retrieve Displayable Status Name
 QString StatusName (eStatus iStatus);
 
 }

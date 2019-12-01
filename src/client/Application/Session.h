@@ -3,7 +3,7 @@
 #include <QtCore/QObject>
 #include <QtCore/QJsonObject>
 #include <QtWebSockets/QWebSocket>
-#include "../../shared/Command.h"
+#include "../../shared/Session/Command.h"
 
 QT_FORWARD_DECLARE_CLASS(QWebSocket)
 

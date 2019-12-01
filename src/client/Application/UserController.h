@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Controller.h"
-#include "../../shared/Command.h"
+#include "../../shared/Session/Command.h"
 #include "../../lib/Math/Range.h"
 #include <QtCore/QRandomGenerator>
 
