@@ -154,6 +154,21 @@ cSession::SendError(const QString& iError) const {
 }
 
 bool compareSession(const QJsonObject& iSession1, const QJsonObject& iSession2) {
+    if (iSession1["status"].toInt() != iSession2["status"].toInt()) {
+        if (iSession1["status"].toInt() == ::nShared::nSession::kSuccess) {
+            return true;
+        }
+        if (iSession2["status"].toInt() == ::nShared::nSession::kSuccess) {
+            return false;
+        }
+        if (iSession1["status"].toInt() == ::nShared::nSession::kFailure) {
+            return true;
+        }
+        if (iSession2["status"].toInt() == ::nShared::nSession::kFailure) {
+            return false;
+        }
+        return false;
+    }
     return iSession1["tryCount"].toInt() < iSession2["tryCount"].toInt();
 }
 

@@ -50,6 +50,11 @@ cApplication::Launch(int argc, char** argv) {
         return;
     }
 
+    // Force Anonymous if Auto mode
+    if (mAuto) {
+        mName = "";
+    }
+
     ::std::string url = "ws://" + mHost + ":" + ::std::to_string(mPort);
 
     mSession = new cSession(QString::fromStdString(mName));
